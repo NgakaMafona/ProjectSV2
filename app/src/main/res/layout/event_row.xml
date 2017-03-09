@@ -54,7 +54,7 @@
             android:textAppearance="?android:textAppearanceLarge"
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="18dp"/>
+            android:layout_marginRight="16dp"/>
     </RelativeLayout>
 
 
