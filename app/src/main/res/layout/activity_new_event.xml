@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_new_event"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="za.co.devj.projectsv2.NewEventActivity"
+    android:background="@drawable/img_background">
+
+    <RadioGroup
+        android:id="@+id/rdg_category"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true">
+
+        <RadioButton
+            android:id="@+id/rdb_soc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/img_soc"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Social Events"
+            android:textAlignment="center"
+            android:textSize="20dp"/>
+
+        <RadioButton
+            android:id="@+id/rdb_corp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/img_corp"
+            android:layout_marginTop="18dp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Corporate Events"
+            android:textAlignment="center"
+            android:textSize="20dp"/>
+
+    </RadioGroup>
+
+    <Button
+    android:id="@+id/btn_next"
+    android:layout_width="200dp"
+    android:layout_height="wrap_content"
+    android:text="@string/next"
+    android:layout_alignParentBottom="true"
+    android:layout_centerHorizontal="true"/>
+
+
+</RelativeLayout>

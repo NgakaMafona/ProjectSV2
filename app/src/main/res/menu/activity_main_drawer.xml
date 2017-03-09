@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_accom"
+            android:icon="@drawable/ic_accom24dp"
+            android:title="@string/nav_accom"/>
+        <item
+            android:id="@+id/nav_tarvel"
+            android:icon="@drawable/ic_travel_24dp"
+            android:title="@string/nav_travel"/>
+        <item
+            android:id="@+id/nav_food"
+            android:icon="@drawable/ic_food_24dp"
+            android:title="@string/nav_food"/>
+        <item
+            android:id="@+id/nav_clothes"
+            android:icon="@drawable/ic_clothes_24dp"
+            android:visible="false"
+            android:title="@string/nav_clothes"/>
+
+        <item
+            android:id="@+id/nav_deco"
+            android:icon="@drawable/ic_decor_24dp"
+            android:visible="false"
+            android:title="@string/nav_deco"/>
+
+        <item
+            android:id="@+id/nav_cakes"
+            android:icon="@drawable/ic_cake_24dp"
+            android:visible="false"
+            android:title="@string/nav_cakes"/>
+
+        <item
+            android:id="@+id/nav_mes"
+            android:icon="@drawable/ic_cart_24dp"
+            android:visible="false"
+            android:title="@string/nav_misc"/>
+
+    </group>
+
+    <item android:title="Communicate">
+        <menu>
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/ic_menu_share"
+                android:title="@string/nav_share"/>
+            <item
+                android:id="@+id/nav_update"
+                android:icon="@drawable/ic_menu_send"
+                android:visible="false"
+                android:title="@string/nav_update"/>
+            <item
+                android:id="@+id/signin"
+                android:icon="@drawable/img_login"
+                android:title="@string/nav_sign"/>
+        </menu>
+    </item>
+
+</menu>
