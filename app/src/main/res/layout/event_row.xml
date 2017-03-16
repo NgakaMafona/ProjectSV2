@@ -5,7 +5,10 @@
     xmlns:card_view = "http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="20dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="8dp"
+    android:layout_marginRight="2dp"
+    android:layout_marginLeft="2dp"
     app:cardElevation="3dp"
     app:cardCornerRadius="5dp">
 
@@ -13,10 +16,6 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
 
             <ImageView
                 android:id="@+id/image_content"
@@ -31,7 +30,8 @@
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
                 android:textSize="15dp"
-                android:layout_margin="5dp"/>
+                android:layout_margin="5dp"
+                android:layout_below="@id/image_content"/>
 
 
             <TextView
@@ -40,21 +40,22 @@
                 android:layout_height="wrap_content"
                 android:textSize="10dp"
                 android:textStyle="italic"
-                android:layout_marginLeft="5dp"/>
+                android:layout_marginLeft="5dp"
+                android:layout_below="@id/tv_title"
+                android:layout_alignParentBottom="true"/>
 
-        </LinearLayout>
 
 
-
-        <TextView
-            android:id="@+id/tv_options"
+        <ImageButton
+            android:id="@+id/btn_options"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="&#8942;"
+            android:text="Services"
+            android:src="@drawable/ic_toc_black_24dp"
             android:textAppearance="?android:textAppearanceLarge"
-            android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="16dp"/>
+            android:layout_marginRight="10dp"
+            android:layout_alignParentBottom="true"/>
     </RelativeLayout>
 
 

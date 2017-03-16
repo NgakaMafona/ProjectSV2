@@ -1,47 +1,41 @@
 package za.co.devj.projectsv2;
 
-import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.media.Image;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
-import android.util.AttributeSet;
 import android.util.Log;
-import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Adapter;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.StackView;
+import android.widget.ListAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.firebase.ui.database.FirebaseListAdapter;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Stack;
 
 import za.co.devj.projectsv2.pojo.events.Events;
+import za.co.devj.projectsv2.pojo.services.Services;
 import za.co.devj.projectsv2.utils.Constants;
 
 public class EventListActivity extends AppCompatActivity
@@ -57,6 +51,16 @@ public class EventListActivity extends AppCompatActivity
     private static TextView tv_evDesc;
 
     private RecyclerView rv;
+
+    private ArrayList<String> service_list = new ArrayList<>();
+    private ArrayList<Boolean> service_checked = new ArrayList<>();
+
+    private static ArrayList<Integer> user_selection = new ArrayList<>();
+
+    private String[] list;
+    private boolean[] checked;
+
+    String item = "";
 
 
     @Override
@@ -109,32 +113,28 @@ public class EventListActivity extends AppCompatActivity
                 viewHolder.setDesc(model.getEv_desc());
                 viewHolder.setImage(getApplicationContext(),model.getImg_url());
 
-
-                viewHolder.options.setOnClickListener(new View.OnClickListener()
+                viewHolder.btn_options.setOnClickListener(new View.OnClickListener()
                 {
                     @Override
                     public void onClick(View view)
                     {
-                        PopupMenu pop = new PopupMenu(getApplicationContext(),viewHolder.options);
-
-                        pop.inflate(R.menu.card_menu);
-
-                        pop.show();
+                        getServices();
                     }
                 });
             }
         };
-
+        adapter.notifyDataSetChanged();
         rv.setAdapter(adapter);
+
     }
 
+    //[Start of getting event list]
     public static class EventViewHolder extends RecyclerView.ViewHolder
     {
         View myView;
-
         Context context;
 
-        TextView options;
+        ImageButton btn_options;
 
         public EventViewHolder(View itemView)
         {
@@ -142,8 +142,27 @@ public class EventListActivity extends AppCompatActivity
 
             myView = itemView;
 
-            options =(TextView) myView.findViewById(R.id.tv_options);
+            context = itemView.getContext();
 
+            btn_options = (ImageButton) myView.findViewById(R.id.btn_options);
+
+            myView.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View view)
+                {
+                    //Toast.makeText(context,"Hey",Toast.LENGTH_LONG).show();
+
+                    if(user_selection.isEmpty())
+                    {
+                        Toast.makeText(context,"Please select services to proceed",Toast.LENGTH_LONG).show();
+                    }
+                    else
+                    {
+                        Toast.makeText(context,"We got your services",Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
         }
         public void setTitle(String t)
         {
@@ -163,13 +182,131 @@ public class EventListActivity extends AppCompatActivity
             Picasso.with(c).load(img_url).into(img_view);
         }
 
-        public void createPopUp(Context c)
+    }
+    //[End of getting event list]
+
+    //[get Service list from database and add it to a multi-choice dialog]
+    public void getServices()
+    {
+        db_ref = FirebaseDatabase.getInstance().getReference().child("Services");
+
+        service_list = new ArrayList<>();
+
+        db_ref.addValueEventListener(new ValueEventListener()
         {
-            PopupMenu pop = new PopupMenu(c,null);
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
+                String serv = "";
+                boolean ch = false;
 
-            pop.inflate(R.menu.card_menu);
+                for(DataSnapshot ds : dataSnapshot.getChildren())
+                {
+                    serv = String.valueOf(ds.getKey());
+                    ch = (Boolean) ds.getValue();
 
-            pop.show();
-        }
+                    service_list.add(serv);
+                    service_checked.add(ch);
+                }
+
+                //convert from arraylist to array
+                list = service_list.toArray(new String[service_list.size()]);
+                checked = new boolean[list.length];
+
+                for(int x = 0; x < checked.length;x++)
+                {
+                    checked[x] = false;
+
+                    Log.e("Here ", ""+service_list.get(x));
+                }
+
+                //create alert dialog with service list
+                if(checked.length == service_list.size())
+                {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(EventListActivity.this);
+                    builder.setTitle("Available Services");
+                    builder.setCancelable(false);
+
+                    builder.setMultiChoiceItems(list, checked, new DialogInterface.OnMultiChoiceClickListener()
+                    {
+                        @Override
+                        public void onClick(DialogInterface dialog, int position, boolean isChecked)
+                        {
+                            checked[position] = isChecked;
+
+                            if(isChecked)
+                            {
+                                if(!user_selection.contains(position))
+                                {
+                                    user_selection.add(position);
+                                }
+                                else
+                                {
+                                    user_selection.remove(position);
+                                }
+                            }
+                        }
+                    });
+
+                    //OK button
+                    builder.setPositiveButton("Ok", new DialogInterface.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(DialogInterface dialog, int position)
+                        {
+
+                            for(int i = 0; i < user_selection.size(); i++)
+                            {
+                                item = item+list[user_selection.get(i)];
+
+                                if(i != user_selection.size() -1)
+                                {
+                                    item = item + ", ";
+                                }
+                            }
+                        }
+                    });
+
+                    //Cancel button
+                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which)
+                        {
+                            dialog.dismiss();
+                        }
+                    });
+
+                    //clear all button
+                    builder.setNeutralButton("Clear all", new DialogInterface.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which)
+                        {
+                            for(int x = 0; x < checked.length;x++)
+                            {
+                                checked[x] = false;
+                            }
+                        }
+                    });
+
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError)
+            {
+
+            }
+        });
+    }
+    //[end of getting Service list from database and add it to a multi-choice dialog]
+
+    //[Start of adding user event to firebase]
+    public void addUserEvent()
+    {
+
     }
 }

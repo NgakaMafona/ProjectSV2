@@ -299,27 +299,6 @@ public class SignIn extends android.app.Fragment implements View.OnClickListener
                 }
             }).start();
 
-
-           /* Handler h = new Handler();
-
-            h.postDelayed(new Runnable()
-            {
-                @Override
-                public void run()
-                {
-
-                    //pc.stopProgressDialoge();
-
-                    if(isSucc)
-                    {
-
-                    }
-                    else
-                    {
-                        Toast.makeText(getActivity(), "Account not Registered", Toast.LENGTH_LONG).show();
-                    }
-                }
-            },2000);*/
         }
     }
 
