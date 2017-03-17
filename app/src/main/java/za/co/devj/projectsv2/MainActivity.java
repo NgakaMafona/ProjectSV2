@@ -39,6 +39,7 @@ import com.google.firebase.storage.StorageReference;
 
 import layout.ProfileSetup;
 import za.co.devj.projectsv2.pojo.user.User;
+import za.co.devj.projectsv2.pojo.userEvents.UserEvents;
 
 public class MainActivity extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener
 {
@@ -63,6 +64,11 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
 
     private Uri pic_uri;
     private String uID;
+
+    private String[] users_selected_services;
+
+    //navigation menu items
+    
 
 
     @Override
@@ -141,6 +147,8 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
                     nav_update.setVisible(true);
 
                     fab.setVisibility(View.VISIBLE);
+
+                    getCustomEventData();
 
                 }
                 else
@@ -273,5 +281,44 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
     {
         mFirebaseAuth.signOut();
 
+    }
+
+    //[customize layout here]
+    public void getCustomEventData()
+    {
+        mDatabase = FirebaseDatabase.getInstance();
+        mDataRef = mDatabase.getReference().child("UserEvents").child(uID);
+
+        mDataRef.addListenerForSingleValueEvent(new ValueEventListener()
+        {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
+                UserEvents data = dataSnapshot.getValue(UserEvents.class);
+
+                String serv = data.getServices();
+
+                Log.e("Event Stuff over here", " " + data.getServices());
+
+                users_selected_services = serv.split(", ");
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError)
+            {
+
+            }
+        });
+    }
+
+    public void customizeMenu()
+    {
+        for(int x  = 0; x < users_selected_services.length;x++)
+        {
+            if(users_selected_services[x].equalsIgnoreCase("Accomodation"));
+            {
+
+            }
+        }
     }
 }

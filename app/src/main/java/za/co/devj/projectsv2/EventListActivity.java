@@ -37,6 +37,7 @@ import java.util.ArrayList;
 
 import za.co.devj.projectsv2.pojo.events.Events;
 import za.co.devj.projectsv2.pojo.services.Services;
+import za.co.devj.projectsv2.pojo.userEvents.UserEvents;
 import za.co.devj.projectsv2.utils.Constants;
 
 public class EventListActivity extends AppCompatActivity
@@ -53,6 +54,7 @@ public class EventListActivity extends AppCompatActivity
 
     private RecyclerView rv;
 
+    private ArrayList<String> events = new ArrayList<>();
     private ArrayList<String> service_list = new ArrayList<>();
     private ArrayList<Boolean> service_checked = new ArrayList<>();
 
@@ -98,6 +100,8 @@ public class EventListActivity extends AppCompatActivity
         {
             Log.e("OK: ", "get db ref");
             db_ref = FirebaseDatabase.getInstance().getReferenceFromUrl(Constants.DB_URL).child(Constants.TAG_CORP);
+
+            onStart();
         }
 
     }
@@ -111,11 +115,13 @@ public class EventListActivity extends AppCompatActivity
                 (Events.class,R.layout.event_row,EventViewHolder.class,db_ref)
         {
             @Override
-            protected void populateViewHolder(final EventViewHolder viewHolder, Events model, int position)
+            protected void populateViewHolder(final EventViewHolder viewHolder, Events model, final int position)
             {
                 viewHolder.setTitle(model.getEv_name());
                 viewHolder.setDesc(model.getEv_desc());
                 viewHolder.setImage(getApplicationContext(),model.getImg_url());
+
+                events.add(model.getEv_name());
 
                 viewHolder.btn_options.setOnClickListener(new View.OnClickListener()
                 {
@@ -143,16 +149,17 @@ public class EventListActivity extends AppCompatActivity
                         }
                         else
                         {
-                            String t = title.getText().toString();
+                            String t = events.get(position);
+
+                            UserEvents ue = new UserEvents(t,"null",item);
 
                             DatabaseReference db_ref = FirebaseDatabase.getInstance().getReference();
 
-                            //db_ref.child("UserEvents").child(uid).setValue();
+                            db_ref.child("UserEvents").child(uid).setValue(ue);
 
-                            //get map to set services as keys
-                            //db_ref.child("UserEvents").child(uid).
+                            Toast.makeText(getApplicationContext(),"Event Created " + t,Toast.LENGTH_LONG).show();
 
-                            //Toast.makeText(getApplicationContext(),"We got your services",Toast.LENGTH_LONG).show();
+                            startActivity(new Intent(EventListActivity.this,MainActivity.class));
                         }
                     }
                 });
