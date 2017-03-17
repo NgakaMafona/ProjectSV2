@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -61,6 +62,9 @@ public class EventListActivity extends AppCompatActivity
     private boolean[] checked;
 
     String item = "";
+
+    private static TextView title;
+    private static TextView desc;
 
 
     @Override
@@ -121,6 +125,37 @@ public class EventListActivity extends AppCompatActivity
                         getServices();
                     }
                 });
+
+                View v = viewHolder.getView();
+
+                v.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View v)
+                    {
+                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+                        String uid = user.getUid();
+
+                        if(user_selection.isEmpty())
+                        {
+                            Toast.makeText(getApplicationContext(),"Please select services to proceed",Toast.LENGTH_LONG).show();
+                        }
+                        else
+                        {
+                            String t = title.getText().toString();
+
+                            DatabaseReference db_ref = FirebaseDatabase.getInstance().getReference();
+
+                            //db_ref.child("UserEvents").child(uid).setValue();
+
+                            //get map to set services as keys
+                            //db_ref.child("UserEvents").child(uid).
+
+                            //Toast.makeText(getApplicationContext(),"We got your services",Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
             }
         };
         adapter.notifyDataSetChanged();
@@ -146,33 +181,16 @@ public class EventListActivity extends AppCompatActivity
 
             btn_options = (ImageButton) myView.findViewById(R.id.btn_options);
 
-            myView.setOnClickListener(new View.OnClickListener()
-            {
-                @Override
-                public void onClick(View view)
-                {
-                    //Toast.makeText(context,"Hey",Toast.LENGTH_LONG).show();
-
-                    if(user_selection.isEmpty())
-                    {
-                        Toast.makeText(context,"Please select services to proceed",Toast.LENGTH_LONG).show();
-                    }
-                    else
-                    {
-                        Toast.makeText(context,"We got your services",Toast.LENGTH_LONG).show();
-                    }
-                }
-            });
         }
         public void setTitle(String t)
         {
-            TextView title = (TextView) myView.findViewById(R.id.tv_title);
+            title = (TextView) myView.findViewById(R.id.tv_title);
             title.setText(t);
         }
 
         public void setDesc(String d)
         {
-            TextView desc = (TextView) myView.findViewById(R.id.tv_desc);
+            desc = (TextView) myView.findViewById(R.id.tv_desc);
             desc.setText(d);
         }
 
@@ -180,6 +198,11 @@ public class EventListActivity extends AppCompatActivity
         {
             ImageView img_view = (ImageView) myView.findViewById(R.id.image_content);
             Picasso.with(c).load(img_url).into(img_view);
+        }
+
+        public View getView()
+        {
+            return myView;
         }
 
     }
@@ -308,5 +331,11 @@ public class EventListActivity extends AppCompatActivity
     public void addUserEvent()
     {
 
+    }
+
+    @Override
+    protected void onPostResume()
+    {
+        super.onPostResume();
     }
 }
