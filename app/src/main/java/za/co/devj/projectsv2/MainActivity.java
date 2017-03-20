@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
     private String[] users_selected_services;
 
     //navigation menu items
-    
+
 
 
     @Override
