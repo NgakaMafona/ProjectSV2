@@ -54,6 +54,8 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
     private DatabaseReference mDataRef;
     private StorageReference storageRef;
 
+    private NavigationView navigationView;
+
     private static MenuItem item;
     private static MenuItem nav_update;
     private TextView user_name;
@@ -68,7 +70,13 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
     private String[] users_selected_services;
 
     //navigation menu items
-
+    private MenuItem itm_accom;
+    private MenuItem itm_trans;
+    private MenuItem itm_cater;
+    private MenuItem itm_cloth;
+    private MenuItem itm_cake;
+    private MenuItem itm_decor;
+    private MenuItem itm_mesc;
 
 
     @Override
@@ -95,14 +103,24 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        //navigation menu
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        //navigation header items
         View v = navigationView.getHeaderView(0);
 
         img_view = (ImageView) v.findViewById(R.id.profile_image);
         user_name = (TextView) v.findViewById(R.id.user_name);
         user_email = (TextView) v.findViewById(R.id.user_email);
+
+        //initialize menu items
+        itm_accom = navigationView.getMenu().findItem(R.id.nav_accom);
+        itm_trans = navigationView.getMenu().findItem(R.id.nav_tarvel);
+        itm_cater = navigationView.getMenu().findItem(R.id.nav_food);
+        itm_cake = navigationView.getMenu().findItem(R.id.nav_cakes);
+        itm_decor = navigationView.getMenu().findItem(R.id.nav_deco);
+        itm_mesc = navigationView.getMenu().findItem(R.id.nav_mes);
 
         item = navigationView.getMenu().findItem(R.id.signin);
         nav_update = navigationView.getMenu().findItem(R.id.nav_update);
@@ -294,13 +312,25 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
             @Override
             public void onDataChange(DataSnapshot dataSnapshot)
             {
-                UserEvents data = dataSnapshot.getValue(UserEvents.class);
 
-                String serv = data.getServices();
+                if(dataSnapshot != null)
+                {
+                    UserEvents data = dataSnapshot.getValue(UserEvents.class);
 
-                Log.e("Event Stuff over here", " " + data.getServices());
+                    String serv = data.getServices();
 
-                users_selected_services = serv.split(", ");
+                    Log.e("Event Stuff over here", " " + data.getServices());
+
+                    users_selected_services = serv.split(", ");
+
+                    //customize menu here
+                    customizeMenu();
+                }
+                else
+                {
+                    Toast.makeText(MainActivity.this,"You have no events yet",Toast.LENGTH_LONG).show();
+                }
+
             }
 
             @Override
@@ -315,9 +345,29 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
     {
         for(int x  = 0; x < users_selected_services.length;x++)
         {
-            if(users_selected_services[x].equalsIgnoreCase("Accomodation"));
+            if(users_selected_services[x].equalsIgnoreCase("Accommodation"))
             {
-
+                itm_accom.setVisible(true);
+            }
+            else if(users_selected_services[x].equalsIgnoreCase("Transport"))
+            {
+                itm_trans.setVisible(true);
+            }
+            else if(users_selected_services[x].equalsIgnoreCase("Catering"))
+            {
+                itm_cater.setVisible(true);
+            }
+            else if(users_selected_services[x].equalsIgnoreCase("Decor"))
+            {
+                itm_decor.setVisible(true);
+            }
+            else if(users_selected_services[x].equalsIgnoreCase("Cake"))
+            {
+                itm_cake.setVisible(true);
+            }
+            else if(users_selected_services[x].equalsIgnoreCase("Miscellaneous"))
+            {
+                itm_mesc.setVisible(true);
             }
         }
     }
