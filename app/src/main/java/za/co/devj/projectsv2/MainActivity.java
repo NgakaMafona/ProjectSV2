@@ -9,6 +9,9 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -19,6 +22,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,9 +41,20 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
+
 import layout.ProfileSetup;
+import za.co.devj.projectsv2.pojo.adapters.FeedsAdapter;
+import za.co.devj.projectsv2.pojo.feedClass.Feeds;
 import za.co.devj.projectsv2.pojo.user.User;
 import za.co.devj.projectsv2.pojo.userEvents.UserEvents;
+import za.co.devj.projectsv2.ui.GoHttp;
+import za.co.devj.projectsv2.utils.Constants;
 
 public class MainActivity extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener
 {
@@ -54,10 +69,6 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
     private DatabaseReference mDataRef;
     private StorageReference storageRef;
 
-    private NavigationView navigationView;
-
-    private static MenuItem item;
-    private static MenuItem nav_update;
     private TextView user_name;
     private TextView user_email;
     private ImageView img_view;
@@ -77,6 +88,22 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
     private MenuItem itm_cake;
     private MenuItem itm_decor;
     private MenuItem itm_mesc;
+
+    private MenuItem itm_ent;
+    private MenuItem itm_trv;
+    private MenuItem itm_food;
+
+    private MenuItem nav_editEvent;
+    private static MenuItem item;
+    private static MenuItem nav_update;
+
+    //feed recucler view
+    private RecyclerView rv;
+
+    //Feed url
+    private String feed_url;
+    private ArrayList<Feeds> feeds;
+    private FeedsAdapter feeds_adapter;
 
 
     @Override
@@ -103,8 +130,10 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
+        rv = (RecyclerView) findViewById(R.id.feed_rec_view);
+
         //navigation menu
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         //navigation header items
@@ -122,9 +151,14 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         itm_decor = navigationView.getMenu().findItem(R.id.nav_deco);
         itm_mesc = navigationView.getMenu().findItem(R.id.nav_mes);
 
+        itm_ent = navigationView.getMenu().findItem(R.id.nav_entertainment_feed);
+        itm_trv = navigationView.getMenu().findItem(R.id.nav_travel_feed);
+        itm_food = navigationView.getMenu().findItem(R.id.nav_food_feed);
+
         item = navigationView.getMenu().findItem(R.id.signin);
         nav_update = navigationView.getMenu().findItem(R.id.nav_update);
         nav_update.setVisible(false);
+        nav_editEvent = navigationView.getMenu().findItem(R.id.nav_edt_ev);
 
 
         mFirebaseAuth = FirebaseAuth.getInstance();
@@ -181,6 +215,19 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
                     item.setTitle("Sign in");
 
                     fab.setVisibility(View.GONE);
+
+                    itm_accom.setVisible(false);
+                    itm_trans.setVisible(false);
+                    itm_cater.setVisible(false);
+                    itm_decor.setVisible(false);
+                    itm_cake.setVisible(false);
+                    itm_mesc.setVisible(false);
+                    nav_editEvent.setVisible(false);
+
+
+                    itm_food.setVisible(true);
+                    itm_ent.setVisible(true);
+                    itm_trv.setVisible(true);
 
                 }
             }
@@ -249,6 +296,10 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         {
 
         }
+        else if (id ==  R.id.nav_edt_ev)
+        {
+            startActivity(new Intent(MainActivity.this,EditEventActivity.class));
+        }
         else if (id == R.id.nav_update)
         {
             startActivity(new Intent(MainActivity.this, UpdateProfileActivity.class));
@@ -260,6 +311,8 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
             if(text.equalsIgnoreCase("Sign In"))
             {
 
+                Toast.makeText(MainActivity.this,"Meh",Toast.LENGTH_LONG).show();
+
                 startActivity(new Intent(MainActivity.this, SignInActivity.class));
 
             }
@@ -268,6 +321,44 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
                 signOut();
 
             }
+        }
+        else if (id == R.id.nav_entertainment_feed)
+        {
+            //get entertainment news feeds
+            feed_url = Constants.FEED_ENT;
+
+            feeds = new ArrayList<>();
+
+            try
+            {
+                String value = new GoHttp().execute(feed_url).get();
+
+                Log.e("DATA ",value);
+
+                feeds = getFeeds(value);
+
+                feeds_adapter = new FeedsAdapter(feeds);
+                rv.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+                rv.setItemAnimator(new DefaultItemAnimator());
+                feeds_adapter.notifyDataSetChanged();
+                rv.setAdapter(feeds_adapter);
+
+
+            }
+            catch (InterruptedException e)
+            {
+                e.printStackTrace();
+            }
+            catch (ExecutionException e)
+            {
+                e.printStackTrace();
+            }
+            catch (JSONException e)
+            {
+                e.printStackTrace();
+            }
+            //end
+
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -325,10 +416,12 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
 
                     //customize menu here
                     customizeMenu();
+
+                    nav_editEvent.setVisible(true);
                 }
                 else
                 {
-                    Toast.makeText(MainActivity.this,"You have no events yet",Toast.LENGTH_LONG).show();
+                    Toast.makeText(MainActivity.this,"You have no array_serv yet",Toast.LENGTH_LONG).show();
                 }
 
             }
@@ -340,7 +433,9 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
             }
         });
     }
+    //end
 
+    //Customize menu items visibility
     public void customizeMenu()
     {
         for(int x  = 0; x < users_selected_services.length;x++)
@@ -371,4 +466,36 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
             }
         }
     }
+    //end
+
+    //Get current news feeds
+    public ArrayList<Feeds> getFeeds(String data) throws JSONException
+    {
+        ArrayList<Feeds> feeds_list = new ArrayList<>();
+
+        JSONObject jObject = new JSONObject(data);
+        JSONArray artiObject = jObject.getJSONArray("articles");
+
+        for(int x = 0; x < artiObject.length(); x++)
+        {
+            Feeds feeds = new Feeds();
+
+            JSONObject j = artiObject.getJSONObject(x);
+
+            feeds.setAuthor(j.getString("author"));
+            feeds.setTitle(j.getString("title"));
+            feeds.setDesc(j.getString("description"));
+            feeds.setUrl(j.getString("url"));
+            feeds.setImgUrl(j.getString("urlToImage"));
+            feeds.setPublishDate(j.getString("publishedAt"));
+
+            feeds_list.add(feeds);
+
+            Log.e("Added " + x + " to list ", " Success");
+        }
+
+        return feeds_list;
+    }
+    //end
+
 }

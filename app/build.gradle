@@ -28,18 +28,17 @@ dependencies {
     //compile "com.android.support:percent:${supportLibVersion}"
     //compile 'com.github.siyamed:android-shape-imageview:0.9.+@aar'
     //support libs
-    
 
     //custom cardview library
-    
+
     //firebase libraries
-    
+
     //image Library
-    
+
     //other
-    
+
     //google play libs
-    
+
     compile 'com.android.support:appcompat-v7:25.2.0'
     compile 'com.android.support:support-v4:25.2.0'
     compile 'com.android.support:recyclerview-v7:25.2.0'
@@ -60,8 +59,10 @@ dependencies {
     compile 'com.jakewharton:butterknife:8.4.0'
     compile 'com.google.android.gms:play-services-auth:10.0.1'
     compile 'com.google.android.gms:play-services:10.0.1'
+    compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha8'
     testCompile 'junit:junit:4.12'
 }
+
 
 
 

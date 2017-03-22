@@ -3,12 +3,9 @@ package za.co.devj.projectsv2;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -20,22 +17,28 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import za.co.devj.projectsv2.pojo.events.Events;
-import za.co.devj.projectsv2.utils.Constants;
+import za.co.devj.projectsv2.pojo.services.Services;
 
 public class AddNewEventToDBActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener
 {
 
-    Spinner spn_ev;
+    Spinner spn_serv;
     ArrayAdapter<String> adapter;
     Resources res;
-    String[] events = null;
+    String[] array_serv = null;
 
-    EditText edt_ev_name;
-    EditText edt_ev_desc;
+    EditText edt_c_name;
+    EditText edt_c_desc;
+    EditText edt_c_tel;
+    EditText edt_c_web;
+    EditText edt_c_addr;
 
     String selected_type;
     String name;
     String desc;
+    String tel;
+    String web;
+    String addr;
 
     private FirebaseAuth mAuth;
     private FirebaseDatabase db;
@@ -51,17 +54,19 @@ public class AddNewEventToDBActivity extends AppCompatActivity implements Adapte
         mAuth = FirebaseAuth.getInstance();
 
 
-        spn_ev = (Spinner) findViewById(R.id.new_event_type);
+        spn_serv = (Spinner) findViewById(R.id.new_event_type);
         res = getResources();
-        events = res.getStringArray(R.array.event_types);
-        adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,events);
-        spn_ev.setAdapter(adapter);
+        array_serv = res.getStringArray(R.array.services);
+        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, array_serv);
+        spn_serv.setAdapter(adapter);
 
-        spn_ev.setOnItemSelectedListener(this);
+        spn_serv.setOnItemSelectedListener(this);
 
-        edt_ev_name = (EditText) findViewById(R.id.edt_ev_name);
-        edt_ev_desc = (EditText) findViewById(R.id.edt_ev_desc);
-
+        edt_c_name = (EditText) findViewById(R.id.edt_c_name);
+        edt_c_desc = (EditText) findViewById(R.id.edt_c_desc);
+        edt_c_tel = (EditText) findViewById(R.id.edt_c_tel);
+        edt_c_web = (EditText) findViewById(R.id.edt_c_web);
+        edt_c_addr = (EditText) findViewById(R.id.edt_c_addr);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener()
@@ -69,8 +74,11 @@ public class AddNewEventToDBActivity extends AppCompatActivity implements Adapte
             @Override
             public void onClick(View view)
             {
-                name = edt_ev_name.getText().toString();
-                desc = edt_ev_desc.getText().toString();
+                name = edt_c_name.getText().toString();
+                desc = edt_c_desc.getText().toString();
+                tel = edt_c_tel.getText().toString();
+                web = edt_c_web.getText().toString();
+                addr = edt_c_addr.getText().toString();
 
                 if(selected_type.equalsIgnoreCase("Select event type"))
                 {
@@ -78,12 +86,9 @@ public class AddNewEventToDBActivity extends AppCompatActivity implements Adapte
                 }
                 else
                 {
-                    Events e = new Events();
+                    Services s = new Services(name,desc,addr,"12345-65432",tel,web,"image url here");
 
-                    e.setEv_name(name);
-                    e.setEv_desc(desc);
-
-                    addEvent(e);
+                    addServ(s);
 
                     Toast.makeText(getBaseContext(),"added " + name + " to " + selected_type,Toast.LENGTH_LONG).show();
                 }
@@ -105,7 +110,7 @@ public class AddNewEventToDBActivity extends AppCompatActivity implements Adapte
 
     }
 
-    public void addEvent(Events ev)
+    public void addServ(Services s)
     {
 
 
@@ -113,8 +118,8 @@ public class AddNewEventToDBActivity extends AppCompatActivity implements Adapte
 
         DatabaseReference ref = db.getReference();
 
-        //Add events
-        ref.child(selected_type).push().setValue(ev);
+        //Add array_serv
+        ref.child("Serv_"+selected_type+"_ads").push().setValue(s);
 
     }
 }

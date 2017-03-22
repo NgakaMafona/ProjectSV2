@@ -3,6 +3,7 @@ package za.co.devj.projectsv2;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -36,7 +37,6 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import za.co.devj.projectsv2.pojo.events.Events;
-import za.co.devj.projectsv2.pojo.services.Services;
 import za.co.devj.projectsv2.pojo.userEvents.UserEvents;
 import za.co.devj.projectsv2.utils.Constants;
 
@@ -67,6 +67,9 @@ public class EventListActivity extends AppCompatActivity
 
     private static TextView title;
     private static TextView desc;
+
+    private SharedPreferences sp;
+    private SharedPreferences.Editor editor;
 
 
     @Override
@@ -153,6 +156,10 @@ public class EventListActivity extends AppCompatActivity
 
                             UserEvents ue = new UserEvents(t,"null",item);
 
+                            editor = sp.edit();
+                            editor.putString("EventType",ue.getEvent_name());
+                            editor.commit();
+
                             DatabaseReference db_ref = FirebaseDatabase.getInstance().getReference();
 
                             db_ref.child("UserEvents").child(uid).setValue(ue);
@@ -160,6 +167,7 @@ public class EventListActivity extends AppCompatActivity
                             Toast.makeText(getApplicationContext(),"Event Created " + t,Toast.LENGTH_LONG).show();
 
                             startActivity(new Intent(EventListActivity.this,MainActivity.class));
+                            finish();
                         }
                     }
                 });
@@ -285,6 +293,9 @@ public class EventListActivity extends AppCompatActivity
                         public void onClick(DialogInterface dialog, int position)
                         {
 
+                            sp = getSharedPreferences("myEvent",MODE_APPEND);
+                            editor = sp.edit();
+
                             for(int i = 0; i < user_selection.size(); i++)
                             {
                                 item = item+list[user_selection.get(i)];
@@ -292,6 +303,9 @@ public class EventListActivity extends AppCompatActivity
                                 if(i != user_selection.size() -1)
                                 {
                                     item = item + ", ";
+
+                                    editor.putString("Item " + i,item);
+                                    editor.commit();
                                 }
                             }
                         }

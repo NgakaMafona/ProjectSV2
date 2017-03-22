@@ -44,6 +44,7 @@
     <string name="nav_cakes">Cakes</string>
     <string name="nav_misc">Miscellaneous</string>
 
+    <string name="nav_edt_event">Edit Event</string>
     <string name="nav_share">Share</string>
     <string name="nav_update">Update Profile</string>
     <string name="nav_sign">Sign In</string>
@@ -61,10 +62,14 @@
     <string name="title_activity_add_new_event_to_db">AddNewEventToDBActivity</string>
 
     <!-- Spinner values -->
-    <string-array name="event_types">
+    <string-array name="services">
         <item>Select event type</item>
-        <item>Corporate</item>
-        <item>Social</item>
+        <item>Accomodation</item>
+        <item>Transport</item>
+        <item>Cakes</item>
+        <item>Catering</item>
+        <item>Decor</item>
+        <item>Clothing</item>
     </string-array>
 
     <string name="cr_ev_name">Event Name</string>
@@ -73,5 +78,9 @@
 
     <!-- Card menu -->
     <string name="card_menu">Select Services</string>
+
+    <!--Edit Events -->
+    <string name="edt_evName">Event Name</string>
+    <string name="edt_evDesc">Event Description</string>
 
 </resources>

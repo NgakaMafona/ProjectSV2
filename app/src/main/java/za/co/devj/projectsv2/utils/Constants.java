@@ -15,4 +15,9 @@ public class Constants
     //Event Items
     public static final String TAG_SOC = "Social";
     public static final String TAG_CORP = "Corporate";
+
+    //Feed URLS
+    public static final String FEED_ENT = "https://newsapi.org/v1/articles?source=entertainment-weekly&sortBy=top&apiKey=0f401d7d467b48858701eaee9c48ac84";
+    public static final String FEED_trv = "https://newsapi.org/v1/articles?source=mashable&sortBy=top&apiKey=0f401d7d467b48858701eaee9c48ac84";
+    public static final String FEED_food = "https://newsapi.org/v1/articles?source=mashable&sortBy=top&apiKey=0f401d7d467b48858701eaee9c48ac84";
 }
