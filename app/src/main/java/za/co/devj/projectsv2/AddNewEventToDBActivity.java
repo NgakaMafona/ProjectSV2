@@ -86,7 +86,7 @@ public class AddNewEventToDBActivity extends AppCompatActivity implements Adapte
                 }
                 else
                 {
-                    Services s = new Services(name,desc,addr,"12345-65432",tel,web,"image url here");
+                    Services s = new Services(name,desc,addr,"12345-65432",tel,web,"image url here","2");
 
                     addServ(s);
 

@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.support.annotation.DrawableRes;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
@@ -82,6 +83,8 @@ public class UpdateProfileActivity extends AppCompatActivity implements RadioGro
 
     private static int GAL_REQ_CODE = 1;
 
+    CollapsingToolbarLayout collapsingToolbarLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -89,6 +92,8 @@ public class UpdateProfileActivity extends AppCompatActivity implements RadioGro
         setContentView(R.layout.activity_update_profile);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
 
         first_name = (EditText) findViewById(R.id.edt_pro_firstname);
         last_name = (EditText) findViewById(R.id.edt_pro_lastname);
@@ -111,8 +116,11 @@ public class UpdateProfileActivity extends AppCompatActivity implements RadioGro
 
         String user = mFirebaseUser.getDisplayName();
 
-        String name = user.substring(0,user.indexOf(" "));
-        String surname = user.substring(user.indexOf(" "));
+        if(user != null)
+        {
+            String name = user.substring(0,user.indexOf(" "));
+            String surname = user.substring(user.indexOf(" "));
+        }
 
         picker.setEnabled(false);
         rdg_gender.setEnabled(false);
@@ -294,8 +302,6 @@ public class UpdateProfileActivity extends AppCompatActivity implements RadioGro
             String date_cr = date.toString();
             String date_mod = date.toString();
 
-
-
             if(bitmap == null)
             {
                 User u = new User(date_cr, date_mod, name, surname, gender,dob);
@@ -308,9 +314,6 @@ public class UpdateProfileActivity extends AppCompatActivity implements RadioGro
                 User u = new User(date_cr, date_mod, name, surname, gender,dob,path);
                 addUser(u);
             }
-
-
-
 
             startActivity(new Intent(UpdateProfileActivity.this,MainActivity.class));
             finish();
@@ -337,7 +340,7 @@ public class UpdateProfileActivity extends AppCompatActivity implements RadioGro
         Toast.makeText(this,"Profile created",Toast.LENGTH_LONG).show();
     }
 
-    public void addProPic()
+    private void addProPic()
     {
         storageRef = FirebaseStorage.getInstance().getReference();
 
@@ -350,8 +353,7 @@ public class UpdateProfileActivity extends AppCompatActivity implements RadioGro
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot)
             {
-                  firebasePath = taskSnapshot.getDownloadUrl();
-
+                firebasePath = taskSnapshot.getDownloadUrl();
             }
         });
     }

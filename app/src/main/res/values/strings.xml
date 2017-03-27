@@ -52,7 +52,7 @@
     <!--Update profile activity -->
     <string name="h_fname">First Name</string>
     <string name="h_lname">Last Name</string>
-    <string name="h_DOB">DOB</string>
+    <string name="h_DOB">u_DOB</string>
     <string name="h_gender">Gender</string>
 
     <!-- New event button next -->

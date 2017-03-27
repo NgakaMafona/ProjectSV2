@@ -20,4 +20,10 @@ public class Constants
     public static final String FEED_ENT = "https://newsapi.org/v1/articles?source=entertainment-weekly&sortBy=top&apiKey=0f401d7d467b48858701eaee9c48ac84";
     public static final String FEED_trv = "https://newsapi.org/v1/articles?source=mashable&sortBy=top&apiKey=0f401d7d467b48858701eaee9c48ac84";
     public static final String FEED_food = "https://newsapi.org/v1/articles?source=mashable&sortBy=top&apiKey=0f401d7d467b48858701eaee9c48ac84";
+
+    //Nav Menu Tags
+    public static final String TAG_NAV_ACCOM = "Serv_Accomodation_ads";
+    public static final String TAG_NAV_CAKE = "Serv_Cakes_ads";
+    public static final String TAG_NAV_TRANS = "Serv_Transport_ads";
+    public static final String TAG_NAV_CATER = "Serv_Catering_ads";
 }

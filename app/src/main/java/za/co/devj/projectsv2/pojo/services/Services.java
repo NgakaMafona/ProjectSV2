@@ -13,13 +13,14 @@ public class Services
     public String serve_tel;
     public String serve_site;
     public String serve_img;
+    public String serve_rating;
 
     public Services()
     {
 
     }
 
-    public Services(String serve_name, String serve_desc, String serve_address, String serve_coordinates, String serve_tel, String serve_site, String serve_img)
+    public Services(String serve_name, String serve_desc, String serve_address, String serve_coordinates, String serve_tel, String serve_site, String serve_img,String serve_rating)
     {
         this.serve_name = serve_name;
         this.serve_desc = serve_desc;
@@ -28,6 +29,7 @@ public class Services
         this.serve_tel = serve_tel;
         this.serve_site = serve_site;
         this.serve_img = serve_img;
+        this.serve_rating = serve_rating;
     }
 
     public String getServe_name()
@@ -98,5 +100,15 @@ public class Services
     public void setServe_img(String serve_img)
     {
         this.serve_img = serve_img;
+    }
+
+    public String getServe_rating()
+    {
+        return serve_rating;
+    }
+
+    public void setServe_rating(String serve_rating)
+    {
+        this.serve_rating = serve_rating;
     }
 }

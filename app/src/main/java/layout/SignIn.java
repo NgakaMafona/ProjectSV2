@@ -166,23 +166,26 @@ public class SignIn extends android.app.Fragment implements View.OnClickListener
             {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
 
+                Log.e("0000 : "," Checking user results");
+
                 if(user != null)
                 {
                     Log.d("MADE_IT_IN" , "Signed in :" + user.getUid());
 
                     String email = user.getEmail();
 
-                    if(email.equalsIgnoreCase("drmafona@gmail.com"))
+                    /*if(email.equalsIgnoreCase("meh@meh.com"))
                     {
                         startActivity(new Intent(getActivity(), AddNewEventToDBActivity.class));
                         getActivity().finish();
                     }
                     else
                     {
-                        startActivity(new Intent(getActivity(), MainActivity.class));
-                        getActivity().finish();
-                    }
 
+                    }*/
+
+                    startActivity(new Intent(getActivity(), MainActivity.class));
+                    getActivity().finish();
 
                 }
                 else
@@ -295,6 +298,7 @@ public class SignIn extends android.app.Fragment implements View.OnClickListener
                 @Override
                 public void run()
                 {
+                    Log.e("Signing in"," here");
                     onSignIn();
                 }
             }).start();
@@ -338,6 +342,7 @@ public class SignIn extends android.app.Fragment implements View.OnClickListener
     //[Start of google Sign in]
     private void onSignIn()
     {
+        Log.e("2 : "," Getting google intent");
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent,RC_SIGN_IN);
     }
@@ -347,25 +352,29 @@ public class SignIn extends android.app.Fragment implements View.OnClickListener
     {
         super.onActivityResult(requestCode, resultCode, data);
 
+        Log.e("3 : "," Checking request code");
         if(requestCode == RC_SIGN_IN)
         {
+            Log.e("4 : "," Getting google results");
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
 
             if(result.isSuccess())
             {
+                Log.e("5 : "," Getting firebase account with google account results");
+
                 GoogleSignInAccount account = result.getSignInAccount();
                 firebaseAuthWithGoogle(account);
             }
             else
             {
-
+                Log.e("6 : "," results not found");
             }
         }
     }
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct)
     {
-        Log.d("GOOGLE ACCT SIGN IN", "Signing in with Google Account " + acct.getId());
+        Log.e("GOOGLE ACCT SIGN IN", "Signing in with Google Account " + acct.getId());
 
         pc = new ProgressClass();
         pc.startProgressDialog(getActivity(),"Signing In","Please wait...");
@@ -378,11 +387,11 @@ public class SignIn extends android.app.Fragment implements View.OnClickListener
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task)
                     {
-                        Log.d("GOOGLE SIGN IN COMPLETE", "Signing in complete ");
+                        Log.e("GOOGLE SIGN IN COMPLETE", "Signing in complete ");
 
                         if(!task.isSuccessful())
                         {
-                            Log.d("SIGNING IN FAILED", "Signing in failed ");
+                            Log.e("SIGNING IN FAILED", "Signing in failed ");
 
                             Toast.makeText(getActivity(),"Login Failed", Toast.LENGTH_LONG).show();
 

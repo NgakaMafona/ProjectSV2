@@ -1,6 +1,5 @@
 package za.co.devj.projectsv2.pojo.user;
 
-import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -11,58 +10,58 @@ public class User
 {
     private String date_cr;
     private String date_mod;
-    private String name;
-    private String surname;
-    private String gender;
-    private String DOB;
-    private String url;
+    private String u_name;
+    private String u_surname;
+    private String u_gender;
+    private String u_DOB;
+    private String u_pro_pic_loc;
 
     public User()
     {
 
     }
 
-    public User(String date_cr, String date_mod, String name, String surname, String gender, String DOB)
+    public User(String date_cr, String date_mod, String u_name, String u_surname, String u_gender, String u_DOB)
     {
         this.date_cr = date_cr;
         this.date_mod = date_mod;
-        this.name = name;
-        this.surname = surname;
-        this.gender = gender;
-        this.DOB = DOB;
+        this.u_name = u_name;
+        this.u_surname = u_surname;
+        this.u_gender = u_gender;
+        this.u_DOB = u_DOB;
     }
 
-    public User(String date_cr, String date_mod, String name, String surname, String gender, String DOB, String url)
+    public User(String date_cr, String date_mod, String u_name, String u_surname, String u_gender, String u_DOB, String u_pro_pic_loc)
     {
 
         this.date_cr = date_cr;
         this.date_mod = date_mod;
-        this.name = name;
-        this.surname = surname;
-        this.gender = gender;
-        this.DOB = DOB;
-        this.url = url;
+        this.u_name = u_name;
+        this.u_surname = u_surname;
+        this.u_gender = u_gender;
+        this.u_DOB = u_DOB;
+        this.u_pro_pic_loc = u_pro_pic_loc;
     }
 
 
-    public String getName()
+    public String getU_Name()
     {
-        return name;
+        return u_name;
     }
 
-    public String getSurname()
+    public String getU_surname()
     {
-        return surname;
+        return u_surname;
     }
 
-    public String getGender()
+    public String getU_gender()
     {
-        return gender;
+        return u_gender;
     }
 
-    public String getDOB()
+    public String getU_DOB()
     {
-        return DOB;
+        return u_DOB;
     }
 
     public String getDate_cr()
@@ -75,9 +74,9 @@ public class User
         return date_mod;
     }
 
-    public String getUrl()
+    public String getU_pro_pic_loc()
     {
-        return url;
+        return u_pro_pic_loc;
     }
 
     public void setDate_cr(String date_cr)
@@ -90,36 +89,36 @@ public class User
         this.date_mod = date_mod;
     }
 
-    public void setName(String name)
+    public void setU_Name(String u_name)
     {
-        this.name = name;
+        this.u_name = u_name;
     }
 
-    public void setSurname(String surname)
+    public void setU_surname(String u_surname)
     {
-        this.surname = surname;
+        this.u_surname = u_surname;
     }
 
-    public void setGender(String gender)
+    public void setU_gender(String u_gender)
     {
-        this.gender = gender;
+        this.u_gender = u_gender;
     }
 
-    public void setDOB(String DOB)
+    public void setU_DOB(String u_DOB)
     {
-        this.DOB = DOB;
+        this.u_DOB = u_DOB;
     }
 
-    public void setUrl(String url)
+    public void setU_pro_pic_loc(String u_pro_pic_loc)
     {
-        this.url = url;
+        this.u_pro_pic_loc = u_pro_pic_loc;
     }
 
     /*public int calcAge()
     {
         int age = 0;
 
-        String strID = getDOB();
+        String strID = getU_DOB();
         String subYear = strID.substring(0,2);
 
         int birth_year = Integer.parseInt(subYear);
@@ -157,11 +156,11 @@ public class User
 
         map.put("date_created",u.getDate_cr());
         map.put("date_modified",u.getDate_mod());
-        map.put("u_name",u.getName());
-        map.put("u_surname",u.getSurname());
-        map.put("u_gender",u.getGender());
-        map.put("u_DOB",u.getDOB());
-        map.put("u_pro_pic_loc",""+u.getUrl());
+        map.put("u_name",u.getU_Name());
+        map.put("u_surname",u.getU_surname());
+        map.put("u_gender",u.getU_gender());
+        map.put("u_DOB",u.getU_DOB());
+        map.put("u_pro_pic_loc",""+u.getU_pro_pic_loc());
 
         return map;
     }

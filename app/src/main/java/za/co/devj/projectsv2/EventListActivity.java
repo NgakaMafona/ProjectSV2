@@ -91,8 +91,6 @@ public class EventListActivity extends AppCompatActivity
 
         if(category.equalsIgnoreCase("Social"))
         {
-
-
             Log.e("OK: ", "get db ref");
             db_ref = FirebaseDatabase.getInstance().getReference().child(Constants.TAG_SOC);
 
